@@ -1,8 +1,6 @@
 # SafePLC-Mini
 
 > Mini soft-PLC en C++17 avec safety functions, conçu comme projet de
-> démonstration pour un poste **Embedded C++ Engineer / Safety-Critical**
-> (cible : Schneider Electric — stack C++ / GoogleTest / Coverity / Parasoft).
 
 [![CI](https://img.shields.io/badge/CI-ready-brightgreen)](.github/workflows/ci.yml)
 [![C++](https://img.shields.io/badge/C%2B%2B-17-blue)](CMakeLists.txt)
@@ -11,7 +9,6 @@
 
 ## Ce que ce projet démontre
 
-| Critère brief Schneider | Démontré par |
 |--------------------------|--------------|
 | Développement C++ sur projets complexes | Architecture en couches, RAII, smart usage, FSM |
 | Tests unitaires (objectif 100%) | GoogleTest, fixtures, fakes, tous chemins erreur testés |
