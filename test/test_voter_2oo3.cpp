@@ -50,16 +50,16 @@ TEST(Voter2oo3, DiscrepancyTransientWithinTolerance) {
 
 TEST(Voter2oo3, UnanimityClearsDiscrepancyCounter) {
     Voter2oo3 v(5U);
-    v.vote(true, true, false);
-    v.vote(true, true, false);
+    (void)v.vote(true, true, false);
+    (void)v.vote(true, true, false);
     EXPECT_EQ(v.discrepancy_ticks(), 2U);
-    v.vote(true, true, true);
+    (void)v.vote(true, true, true);
     EXPECT_EQ(v.discrepancy_ticks(), 0U);
 }
 
 TEST(Voter2oo3, ResetClearsCounter) {
     Voter2oo3 v(0U);
-    v.vote(true, false, true);
+    (void)v.vote(true, false, true);
     v.reset();
     EXPECT_EQ(v.discrepancy_ticks(), 0U);
 }

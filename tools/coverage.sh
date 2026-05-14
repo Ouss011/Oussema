@@ -18,7 +18,7 @@ ctest --preset=coverage
 
 # 3) Capture coverage data.
 lcov --capture --directory "${BUILD_DIR}" --output-file "${BUILD_DIR}/coverage.info" \
-     --rc lcov_branch_coverage=1 --ignore-errors mismatch,inconsistent
+     --rc lcov_branch_coverage=1 --ignore-errors gcov,source,graph
 
 # 4) Strip out third-party + test code.
 lcov --remove "${BUILD_DIR}/coverage.info" \
@@ -27,7 +27,7 @@ lcov --remove "${BUILD_DIR}/coverage.info" \
      '*/test/*' \
      '*/app/*' \
      --output-file "${BUILD_DIR}/coverage.filtered.info" \
-     --rc lcov_branch_coverage=1 --ignore-errors unused
+     --rc lcov_branch_coverage=1 --ignore-errors gcov,source,graph
 
 # 5) Render HTML.
 genhtml "${BUILD_DIR}/coverage.filtered.info" \

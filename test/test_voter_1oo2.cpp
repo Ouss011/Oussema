@@ -37,8 +37,8 @@ TEST(Voter1oo2, DiscrepancyTransientWithinTolerance) {
 
 TEST(Voter1oo2, DiscrepancyPersistsBeyondTolerance) {
     Voter1oo2 v(2U);
-    v.vote(true, false);
-    v.vote(true, false);
+    (void)v.vote(true, false);
+    (void)v.vote(true, false);
     const auto r = v.vote(true, false);
     EXPECT_EQ(r.fault, Voter1oo2::FaultMode::Discrepancy);
     EXPECT_EQ(v.discrepancy_ticks(), 3U);
@@ -46,16 +46,16 @@ TEST(Voter1oo2, DiscrepancyPersistsBeyondTolerance) {
 
 TEST(Voter1oo2, AgreementClearsDiscrepancyCounter) {
     Voter1oo2 v(5U);
-    v.vote(true, false);
-    v.vote(true, false);
+    (void)v.vote(true, false);
+    (void)v.vote(true, false);
     EXPECT_EQ(v.discrepancy_ticks(), 2U);
-    v.vote(true, true);
+    (void)v.vote(true, true);
     EXPECT_EQ(v.discrepancy_ticks(), 0U);
 }
 
 TEST(Voter1oo2, ResetClearsCounter) {
     Voter1oo2 v(0U);
-    v.vote(true, false);
+    (void)v.vote(true, false);
     EXPECT_NE(v.discrepancy_ticks(), 0U);
     v.reset();
     EXPECT_EQ(v.discrepancy_ticks(), 0U);
