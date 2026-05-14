@@ -11,7 +11,7 @@ namespace safeplc::safety {
 
 class Voter2oo3 {
 public:
-    enum class FaultMode : std::uint8_t { Ok, Discrepancy };
+    enum class FaultMode : std::uint8_t { ok, discrepancy };
 
     struct Result {
         bool value;
@@ -25,12 +25,12 @@ public:
         const int sum = static_cast<int>(a) + static_cast<int>(b) + static_cast<int>(c);
         if (sum == 0 || sum == 3) {
             discrepancy_ticks_ = 0U;
-            return Result{sum == 3, FaultMode::Ok};
+            return Result{sum == 3, FaultMode::ok};
         }
         ++discrepancy_ticks_;
         const bool majority = (sum >= 2);
         const FaultMode fault =
-            (discrepancy_ticks_ > tolerance_) ? FaultMode::Discrepancy : FaultMode::Ok;
+            (discrepancy_ticks_ > tolerance_) ? FaultMode::discrepancy : FaultMode::ok;
         return Result{majority, fault};
     }
 

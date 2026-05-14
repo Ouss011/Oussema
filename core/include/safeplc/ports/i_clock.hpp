@@ -19,7 +19,7 @@ public:
     IClock& operator=(IClock&&) = delete;
 
     /// Monotonic time in milliseconds since an arbitrary epoch.
-    virtual std::uint32_t millis() const noexcept = 0;
+    [[nodiscard]] virtual std::uint32_t millis() const noexcept = 0;
 };
 
 }  // namespace safeplc::ports

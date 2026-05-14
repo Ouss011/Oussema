@@ -19,15 +19,15 @@
 
 namespace safeplc::fsm {
 
-enum class SafetyState : std::uint8_t { Init, PreRun, Run, Fault };
+enum class SafetyState : std::uint8_t { init, pre_run, run, fault };
 
 enum class SafetyEvent : std::uint8_t {
-    InitOk,
-    InitFail,
-    RunRequest,
-    Stop,
-    Fault,
-    Reset,
+    init_ok,
+    init_fail,
+    run_request,
+    stop,
+    fault,
+    reset,
 };
 
 class SafetyFsm {
@@ -37,21 +37,21 @@ public:
     /// Process an external event and return the resulting state.
     SafetyState on_event(SafetyEvent ev) noexcept {
         switch (state_) {
-        case SafetyState::Init:
-            if (ev == SafetyEvent::InitOk)        { state_ = SafetyState::PreRun; }
-            else if (ev == SafetyEvent::InitFail) { state_ = SafetyState::Fault; }
-            else if (ev == SafetyEvent::Fault)    { state_ = SafetyState::Fault; }
+        case SafetyState::init:
+            if (ev == SafetyEvent::init_ok)        { state_ = SafetyState::pre_run; }
+            else if (ev == SafetyEvent::init_fail) { state_ = SafetyState::fault; }
+            else if (ev == SafetyEvent::fault)     { state_ = SafetyState::fault; }
             break;
-        case SafetyState::PreRun:
-            if (ev == SafetyEvent::RunRequest) { state_ = SafetyState::Run; }
-            else if (ev == SafetyEvent::Fault) { state_ = SafetyState::Fault; }
+        case SafetyState::pre_run:
+            if (ev == SafetyEvent::run_request) { state_ = SafetyState::run; }
+            else if (ev == SafetyEvent::fault)  { state_ = SafetyState::fault; }
             break;
-        case SafetyState::Run:
-            if (ev == SafetyEvent::Stop)       { state_ = SafetyState::PreRun; }
-            else if (ev == SafetyEvent::Fault) { state_ = SafetyState::Fault; }
+        case SafetyState::run:
+            if (ev == SafetyEvent::stop)        { state_ = SafetyState::pre_run; }
+            else if (ev == SafetyEvent::fault)  { state_ = SafetyState::fault; }
             break;
-        case SafetyState::Fault:
-            if (ev == SafetyEvent::Reset) { state_ = SafetyState::Init; }
+        case SafetyState::fault:
+            if (ev == SafetyEvent::reset) { state_ = SafetyState::init; }
             break;
         }
         return state_;
@@ -60,11 +60,11 @@ public:
     [[nodiscard]] SafetyState state() const noexcept { return state_; }
 
     [[nodiscard]] bool is_safe_to_actuate() const noexcept {
-        return state_ == SafetyState::Run;
+        return state_ == SafetyState::run;
     }
 
 private:
-    SafetyState state_ = SafetyState::Init;
+    SafetyState state_ = SafetyState::init;
 };
 
 }  // namespace safeplc::fsm

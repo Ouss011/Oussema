@@ -11,7 +11,7 @@ namespace safeplc::safety {
 
 class Voter1oo2 {
 public:
-    enum class FaultMode : std::uint8_t { Ok, Discrepancy };
+    enum class FaultMode : std::uint8_t { ok, discrepancy };
 
     struct Result {
         bool value;
@@ -25,11 +25,11 @@ public:
         const bool output = a || b;
         if (a == b) {
             discrepancy_ticks_ = 0U;
-            return Result{output, FaultMode::Ok};
+            return Result{output, FaultMode::ok};
         }
         ++discrepancy_ticks_;
         const FaultMode fault =
-            (discrepancy_ticks_ > tolerance_) ? FaultMode::Discrepancy : FaultMode::Ok;
+            (discrepancy_ticks_ > tolerance_) ? FaultMode::discrepancy : FaultMode::ok;
         return Result{output, fault};
     }
 

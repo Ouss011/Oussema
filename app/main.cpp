@@ -17,16 +17,16 @@
 
 namespace {
 
-std::atomic<bool> g_running{true};
+std::atomic<bool> g_running{true};  // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 
 void on_sigint(int /*sig*/) noexcept { g_running.store(false); }
 
 const char* state_name(safeplc::fsm::SafetyState s) noexcept {
     switch (s) {
-    case safeplc::fsm::SafetyState::Init:   return "Init";
-    case safeplc::fsm::SafetyState::PreRun: return "PreRun";
-    case safeplc::fsm::SafetyState::Run:    return "Run";
-    case safeplc::fsm::SafetyState::Fault:  return "Fault";
+    case safeplc::fsm::SafetyState::init:   return "Init";
+    case safeplc::fsm::SafetyState::pre_run: return "PreRun";
+    case safeplc::fsm::SafetyState::run:    return "Run";
+    case safeplc::fsm::SafetyState::fault:  return "Fault";
     }
     return "?";
 }
@@ -34,7 +34,7 @@ const char* state_name(safeplc::fsm::SafetyState s) noexcept {
 }  // namespace
 
 int main() {
-    std::signal(SIGINT, on_sigint);
+    (void)std::signal(SIGINT, on_sigint);
 
     LinuxClock clock;
     safeplc::fsm::SafetyFsm fsm;
@@ -43,8 +43,8 @@ int main() {
     safeplc::safety::Watchdog wd(clock, 500U);
 
     // Boot sequence.
-    fsm.on_event(safeplc::fsm::SafetyEvent::InitOk);
-    fsm.on_event(safeplc::fsm::SafetyEvent::RunRequest);
+    fsm.on_event(safeplc::fsm::SafetyEvent::init_ok);
+    fsm.on_event(safeplc::fsm::SafetyEvent::run_request);
 
     std::cout << "safeplc-mini starting — Ctrl-C to stop\n";
 
@@ -56,13 +56,13 @@ int main() {
         const bool ch_c = ((tick % 50U) != 49U);  // brief 1-tick glitch every 5 s
 
         const auto v = voter.vote(ch_a, ch_b, ch_c);
-        if (v.fault == safeplc::safety::Voter2oo3::FaultMode::Discrepancy) {
-            fsm.on_event(safeplc::fsm::SafetyEvent::Fault);
+        if (v.fault == safeplc::safety::Voter2oo3::FaultMode::discrepancy) {
+            fsm.on_event(safeplc::fsm::SafetyEvent::fault);
         }
 
         const bool estop_triggered = estop.update(true);  // NC, always safe in demo
         if (estop_triggered) {
-            fsm.on_event(safeplc::fsm::SafetyEvent::Fault);
+            fsm.on_event(safeplc::fsm::SafetyEvent::fault);
         }
 
         wd.kick();

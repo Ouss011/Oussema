@@ -9,20 +9,20 @@ using safeplc::safety::EStop;
 
 TEST(EStop_NC, StartsInSafeState) {
     EStop e;
-    EXPECT_EQ(e.state(), EStop::State::Safe);
+    EXPECT_EQ(e.state(), EStop::State::safe);
     EXPECT_FALSE(e.triggered());
 }
 
 TEST(EStop_NC, RawHighKeepsSafe) {
     EStop e;
     EXPECT_FALSE(e.update(true));  // NC: 1 = safe
-    EXPECT_EQ(e.state(), EStop::State::Safe);
+    EXPECT_EQ(e.state(), EStop::State::safe);
 }
 
 TEST(EStop_NC, RawLowTriggers) {
     EStop e;
     EXPECT_TRUE(e.update(false));  // NC: 0 = pressed
-    EXPECT_EQ(e.state(), EStop::State::Triggered);
+    EXPECT_EQ(e.state(), EStop::State::triggered);
 }
 
 TEST(EStop_NC, RemainsLatchedWhileButtonStillPressed) {
@@ -37,7 +37,7 @@ TEST(EStop_NC, ResetSucceedsAfterRelease) {
     e.update(false);                  // press
     e.update(true);                   // release
     EXPECT_TRUE(e.reset());
-    EXPECT_EQ(e.state(), EStop::State::Safe);
+    EXPECT_EQ(e.state(), EStop::State::safe);
 }
 
 TEST(EStop_NC, RetriggerAfterResetIsPossible) {
@@ -52,7 +52,7 @@ TEST(EStop_NC, RetriggerAfterResetIsPossible) {
 TEST(EStop_NC, ResetFromSafeStateIsNoOp) {
     EStop e;
     EXPECT_FALSE(e.reset());
-    EXPECT_EQ(e.state(), EStop::State::Safe);
+    EXPECT_EQ(e.state(), EStop::State::safe);
 }
 
 // ---- Active-high wiring ---------------------------------------------------
@@ -66,7 +66,7 @@ TEST(EStop_AH, ActiveHighRawHighTriggers) {
 TEST(EStop_AH, ActiveHighRawLowKeepsSafe) {
     EStop e(false);
     EXPECT_FALSE(e.update(false));
-    EXPECT_EQ(e.state(), EStop::State::Safe);
+    EXPECT_EQ(e.state(), EStop::State::safe);
 }
 
 TEST(EStop_AH, ResetFlowMirrorsNC) {

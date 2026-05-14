@@ -18,8 +18,8 @@ namespace safeplc::safety {
 class EStop {
 public:
     enum class State : std::uint8_t {
-        Safe,        ///< Button released, no fault, output inactive.
-        Triggered,   ///< Button pressed OR latched after release pending reset.
+        safe,        ///< Button released, no fault, output inactive.
+        triggered,   ///< Button pressed OR latched after release pending reset.
     };
 
     /// @param input_active_low  true if the underlying signal uses NC contact
@@ -32,20 +32,20 @@ public:
     bool update(bool raw_input) noexcept {
         const bool pressed = input_active_low_ ? !raw_input : raw_input;
         if (pressed) {
-            state_ = State::Triggered;
+            state_ = State::triggered;
             input_released_since_trigger_ = false;
-        } else if (state_ == State::Triggered) {
+        } else if (state_ == State::triggered) {
             input_released_since_trigger_ = true;
         }
-        return state_ == State::Triggered;
+        return state_ == State::triggered;
     }
 
     /// Acknowledge a trigger. Only returns to Safe if the input has been
     /// released at least once since the trigger (anti-defeat).
     /// @return true if the reset was effective.
     bool reset() noexcept {
-        if (state_ == State::Triggered && input_released_since_trigger_) {
-            state_ = State::Safe;
+        if (state_ == State::triggered && input_released_since_trigger_) {
+            state_ = State::safe;
             input_released_since_trigger_ = false;
             return true;
         }
@@ -53,11 +53,11 @@ public:
     }
 
     [[nodiscard]] State state() const noexcept { return state_; }
-    [[nodiscard]] bool triggered() const noexcept { return state_ == State::Triggered; }
+    [[nodiscard]] bool triggered() const noexcept { return state_ == State::triggered; }
 
 private:
     bool input_active_low_;
-    State state_ = State::Safe;
+    State state_ = State::safe;
     bool input_released_since_trigger_ = false;
 };
 

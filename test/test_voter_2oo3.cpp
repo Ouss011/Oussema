@@ -9,14 +9,14 @@ TEST(Voter2oo3, AllLowReturnsLowOk) {
     Voter2oo3 v;
     const auto r = v.vote(false, false, false);
     EXPECT_FALSE(r.value);
-    EXPECT_EQ(r.fault, Voter2oo3::FaultMode::Ok);
+    EXPECT_EQ(r.fault, Voter2oo3::FaultMode::ok);
 }
 
 TEST(Voter2oo3, AllHighReturnsHighOk) {
     Voter2oo3 v;
     const auto r = v.vote(true, true, true);
     EXPECT_TRUE(r.value);
-    EXPECT_EQ(r.fault, Voter2oo3::FaultMode::Ok);
+    EXPECT_EQ(r.fault, Voter2oo3::FaultMode::ok);
 }
 
 TEST(Voter2oo3, TwoOfThreeMajorityReturnsHigh) {
@@ -37,15 +37,15 @@ TEST(Voter2oo3, ImmediateDiscrepancyWhenToleranceZero) {
     Voter2oo3 v(0U);
     const auto r = v.vote(true, true, false);
     EXPECT_TRUE(r.value);
-    EXPECT_EQ(r.fault, Voter2oo3::FaultMode::Discrepancy);
+    EXPECT_EQ(r.fault, Voter2oo3::FaultMode::discrepancy);
 }
 
 TEST(Voter2oo3, DiscrepancyTransientWithinTolerance) {
     Voter2oo3 v(3U);
     for (int i = 0; i < 3; ++i) {
-        EXPECT_EQ(v.vote(true, true, false).fault, Voter2oo3::FaultMode::Ok);
+        EXPECT_EQ(v.vote(true, true, false).fault, Voter2oo3::FaultMode::ok);
     }
-    EXPECT_EQ(v.vote(true, true, false).fault, Voter2oo3::FaultMode::Discrepancy);
+    EXPECT_EQ(v.vote(true, true, false).fault, Voter2oo3::FaultMode::discrepancy);
 }
 
 TEST(Voter2oo3, UnanimityClearsDiscrepancyCounter) {

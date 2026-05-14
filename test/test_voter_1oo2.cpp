@@ -9,21 +9,21 @@ TEST(Voter1oo2, BothLowReturnsLowOk) {
     Voter1oo2 v;
     const auto r = v.vote(false, false);
     EXPECT_FALSE(r.value);
-    EXPECT_EQ(r.fault, Voter1oo2::FaultMode::Ok);
+    EXPECT_EQ(r.fault, Voter1oo2::FaultMode::ok);
 }
 
 TEST(Voter1oo2, BothHighReturnsHighOk) {
     Voter1oo2 v;
     const auto r = v.vote(true, true);
     EXPECT_TRUE(r.value);
-    EXPECT_EQ(r.fault, Voter1oo2::FaultMode::Ok);
+    EXPECT_EQ(r.fault, Voter1oo2::FaultMode::ok);
 }
 
 TEST(Voter1oo2, DiscrepancyImmediateWhenToleranceZero) {
     Voter1oo2 v(0U);
     const auto r = v.vote(true, false);
     EXPECT_TRUE(r.value);  // OR
-    EXPECT_EQ(r.fault, Voter1oo2::FaultMode::Discrepancy);
+    EXPECT_EQ(r.fault, Voter1oo2::FaultMode::discrepancy);
 }
 
 TEST(Voter1oo2, DiscrepancyTransientWithinTolerance) {
@@ -31,7 +31,7 @@ TEST(Voter1oo2, DiscrepancyTransientWithinTolerance) {
     for (int i = 0; i < 3; ++i) {
         const auto r = v.vote(false, true);
         EXPECT_TRUE(r.value);
-        EXPECT_EQ(r.fault, Voter1oo2::FaultMode::Ok);
+        EXPECT_EQ(r.fault, Voter1oo2::FaultMode::ok);
     }
 }
 
@@ -40,7 +40,7 @@ TEST(Voter1oo2, DiscrepancyPersistsBeyondTolerance) {
     (void)v.vote(true, false);
     (void)v.vote(true, false);
     const auto r = v.vote(true, false);
-    EXPECT_EQ(r.fault, Voter1oo2::FaultMode::Discrepancy);
+    EXPECT_EQ(r.fault, Voter1oo2::FaultMode::discrepancy);
     EXPECT_EQ(v.discrepancy_ticks(), 3U);
 }
 

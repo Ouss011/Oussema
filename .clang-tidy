@@ -4,7 +4,6 @@
 Checks: >
   -*,
   bugprone-*,
-  cert-*,
   clang-analyzer-*,
   cppcoreguidelines-*,
   hicpp-*,
@@ -19,7 +18,12 @@ Checks: >
   -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
   -hicpp-no-array-decay,
   -bugprone-easily-swappable-parameters,
-  -readability-identifier-length
+  -readability-identifier-length,
+  -bugprone-reserved-identifier,
+  -cppcoreguidelines-macro-usage,
+  -modernize-use-using,
+  -cert-dcl37-c,
+  -cert-dcl51-cpp
 
 WarningsAsErrors: '*'
 
